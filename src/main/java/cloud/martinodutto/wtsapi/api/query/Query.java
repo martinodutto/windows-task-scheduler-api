@@ -1,21 +1,24 @@
-package cloud.martinodutto.wtsapi.query;
+package cloud.martinodutto.wtsapi.api.query;
 
+import cloud.martinodutto.wtsapi.api.query.parsers.CSVQueryParser;
 import cloud.martinodutto.wtsapi.configuration.ConfigurationParameters;
 import cloud.martinodutto.wtsapi.exceptions.TaskNotFoundException;
 import cloud.martinodutto.wtsapi.exceptions.WtsInvocationException;
-import cloud.martinodutto.wtsapi.query.parsers.CSVQueryParser;
-import cloud.martinodutto.wtsapi.services.CommandProducer;
-import cloud.martinodutto.wtsapi.services.WtsInvoker;
+import cloud.martinodutto.wtsapi.internal.services.CommandProducer;
+import cloud.martinodutto.wtsapi.internal.services.WtsInvoker;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static cloud.martinodutto.wtsapi.query.Parameters.*;
+import static cloud.martinodutto.wtsapi.api.query.Parameters.*;
 
 /**
- * A class that can be used to wrap calls to the Windows task scheduler with parameter <code>/Query</code>.
+ * Wraps calls to the Windows task scheduler with parameter <code>/Query</code>.
+ *
+ * @see <a href="https://docs.microsoft.com/en-us/windows/win32/taskschd/schtasks#querying-for-task-information">Microsoft documentation</a>
  */
 public final class Query {
 
@@ -62,13 +65,16 @@ public final class Query {
      * @throws IOException          An I/O error occurred.
      * @throws InterruptedException An interrupt was issued while expecting the output of the Windows command.
      */
-    public List<Map<String, String>> queryForTask(String taskName) throws IOException, InterruptedException {
+    public List<Map<String, String>> queryForTask(@Nonnull String taskName) throws IOException, InterruptedException {
         Objects.requireNonNull(taskName, "You have to provide a task name");
         CommandProducer cp = new CommandProducer.Builder(config.getSchTasksCommand())
                 .add(QUERY)
                 .add(FORMAT.getCommand(), "CSV")
                 .add(TASKNAME.getCommand(), "\"" + taskName + "\"")
                 .add(VERBOSE.getCommand())
+                .addIfNotNull(SYSTEM.getCommand(), config.getRemoteSystem())
+                .addIfNotNull(USERNAME.getCommand(), config.getRemoteUser())
+                .addIfNotNull(PASSWORD.getCommand(), config.getRemotePassword())
                 .build();
         List<String> commands = cp.commands();
 

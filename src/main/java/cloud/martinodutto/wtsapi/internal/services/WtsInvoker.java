@@ -1,4 +1,4 @@
-package cloud.martinodutto.wtsapi.services;
+package cloud.martinodutto.wtsapi.internal.services;
 
 import cloud.martinodutto.wtsapi.exceptions.WtsInvocationException;
 

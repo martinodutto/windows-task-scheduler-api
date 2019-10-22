@@ -1,6 +1,6 @@
-package cloud.martinodutto.wtsapi.query;
+package cloud.martinodutto.wtsapi.api.query;
 
-import cloud.martinodutto.wtsapi.query.parsers.CSVQueryParser;
+import cloud.martinodutto.wtsapi.api.query.parsers.CSVQueryParser;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

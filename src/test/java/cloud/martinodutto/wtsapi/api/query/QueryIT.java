@@ -1,4 +1,4 @@
-package cloud.martinodutto.wtsapi.query;
+package cloud.martinodutto.wtsapi.api.query;
 
 import cloud.martinodutto.wtsapi.configuration.ConfigurationParameters;
 import cloud.martinodutto.wtsapi.configuration.LocalConfigurationParameters;

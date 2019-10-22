@@ -1,4 +1,4 @@
-package cloud.martinodutto.wtsapi.query;
+package cloud.martinodutto.wtsapi.api.query;
 
 enum Parameters {
     SYSTEM("/S"),

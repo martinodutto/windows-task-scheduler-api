@@ -1,4 +1,4 @@
-package cloud.martinodutto.wtsapi.services;
+package cloud.martinodutto.wtsapi.internal.services;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,6 +36,13 @@ public final class CommandProducer {
         public Builder add(@Nonnull String commandParameter, @Nonnull String command) {
             backingList.add(requireNonNull(commandParameter, "Invalid null command parameter"));
             backingList.add(requireNonNull(command, "Invalid null command"));
+            return this;
+        }
+
+        public Builder addIfNotNull(@Nullable String command) {
+            if (command != null) {
+                backingList.add(command);
+            }
             return this;
         }
 

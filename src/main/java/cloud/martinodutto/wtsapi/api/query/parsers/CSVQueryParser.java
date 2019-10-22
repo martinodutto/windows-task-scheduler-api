@@ -1,4 +1,4 @@
-package cloud.martinodutto.wtsapi.query.parsers;
+package cloud.martinodutto.wtsapi.api.query.parsers;
 
 import com.opencsv.CSVReaderHeaderAware;
 import com.opencsv.CSVReaderHeaderAwareBuilder;
