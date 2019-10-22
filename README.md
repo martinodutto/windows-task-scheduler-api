@@ -37,7 +37,7 @@ All the classes you need to use reflect the name of the operation that the Windo
 | `Create`      | :warning: Still working on it :warning: |
 | `Change`      | :warning: Still working on it :warning: |
 
-Any of the previous classes can be created in just one way: using the `of` static method.
+Any of the previous objects can be created in just one way: using the `of` static method.
 
 ## Dependency management
 
