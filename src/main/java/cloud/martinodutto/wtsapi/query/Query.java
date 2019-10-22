@@ -1,16 +1,20 @@
 package cloud.martinodutto.wtsapi.query;
 
-import cloud.martinodutto.wtsapi.CommandProducer;
-import cloud.martinodutto.wtsapi.WtsInvoker;
 import cloud.martinodutto.wtsapi.configuration.ConfigurationParameters;
 import cloud.martinodutto.wtsapi.exceptions.TaskNotFoundException;
 import cloud.martinodutto.wtsapi.exceptions.WtsInvocationException;
+import cloud.martinodutto.wtsapi.query.parsers.CSVQueryParser;
+import cloud.martinodutto.wtsapi.services.CommandProducer;
+import cloud.martinodutto.wtsapi.services.WtsInvoker;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * A class that can be used to wrap calls to the Windows task scheduler with parameter <code>/Query</code>.
+ */
 public final class Query {
 
     private ConfigurationParameters config;

@@ -1,4 +1,4 @@
-package cloud.martinodutto.wtsapi.query;
+package cloud.martinodutto.wtsapi.query.parsers;
 
 import com.opencsv.CSVReaderHeaderAware;
 import com.opencsv.CSVReaderHeaderAwareBuilder;
@@ -14,7 +14,7 @@ import java.util.Map;
  * Parses the results of calling the Windows task scheduler command with the following parameters:
  * <code>/Query /FO CSV</code>.
  */
-class CSVQueryParser implements QueryParser<List<Map<String, String>>> {
+public final class CSVQueryParser implements QueryParser<List<Map<String, String>>> {
 
     @Override
     public List<Map<String, String>> parse(String rawCommandOutput) throws IOException {
@@ -38,8 +38,8 @@ class CSVQueryParser implements QueryParser<List<Map<String, String>>> {
     /**
      * Identifies if a row is another header, by comparing it to the content of the first row of the CSV file.
      *
-     * <p>This method is useful because of the way the results of the "/Query" method are presented: the headers
-     * can be repeated many times.</p>
+     * <p>This method is useful because of the way the results of the <code>/Query</code> method are presented: the
+     * headers can be repeated many times.</p>
      *
      * @param rowMap The mapping that represents the current row.
      * @return True if this row is another header.
