@@ -20,7 +20,7 @@ For example, to query for the information concerning a specific task:
 
 ```Java
 Query q = Query.of(LocalConfigurationParameters.getInstance());
-List<Map<String, String>> tasksInfos = q.queryForTask(myTaskName);
+List<Map<String, String>> taskInfos = q.queryForTask(myTaskName);
 ```
 
 Implementations of the `ConfigurationParameters` interface will help you provide several custom parameters to deal with remote systems or special `schtasks.exe` paths.
