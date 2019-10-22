@@ -1,8 +1,12 @@
 package cloud.martinodutto.wtsapi.services;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 public final class CommandProducer {
 
@@ -24,8 +28,22 @@ public final class CommandProducer {
             this.backingList.add(schTasksCommand);
         }
 
-        public Builder add(String command) {
-            backingList.add(command);
+        public Builder add(@Nonnull String command) {
+            backingList.add(requireNonNull(command, "Invalid null command"));
+            return this;
+        }
+
+        public Builder add(@Nonnull String commandParameter, @Nonnull String command) {
+            backingList.add(requireNonNull(commandParameter, "Invalid null command parameter"));
+            backingList.add(requireNonNull(command, "Invalid null command"));
+            return this;
+        }
+
+        public Builder addIfNotNull(@Nonnull String commandParameter, @Nullable String command) {
+            if (command != null) {
+                backingList.add(requireNonNull(commandParameter, "Invalid null command parameter"));
+                backingList.add(command);
+            }
             return this;
         }
 
