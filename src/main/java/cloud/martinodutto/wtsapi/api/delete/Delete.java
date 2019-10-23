@@ -46,7 +46,8 @@ public final class Delete {
         try {
             WtsInvoker.submitCommands(commands);
         } catch (WtsInvocationException wie) {
-            if (wie.getMessage().trim().matches("ERROR: The specified task name \".*\" does not exist in the system.")) {
+            if (wie.getMessage().trim().matches("ERROR: The specified task name \".*\" does not exist in the system.")
+                    || wie.getMessage().trim().equals("ERROR: The system cannot find the file specified.")) {
                 throw new TaskNotFoundException(taskName);
             } else {
                 throw wie;
