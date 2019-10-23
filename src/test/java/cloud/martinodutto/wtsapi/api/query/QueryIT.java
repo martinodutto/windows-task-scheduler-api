@@ -31,7 +31,7 @@ class QueryIT {
     }
 
     @Test
-    void anInexistentTaskCannotBeFound() {
+    void aNonexistentTaskCannotBeFound() {
         Query q = Query.of(LocalConfigurationParameters.getInstance());
         assertThrows(TaskNotFoundException.class, () -> q.queryForTask("I don't exist!"));
     }

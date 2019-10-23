@@ -3,7 +3,7 @@ package cloud.martinodutto.wtsapi.api.delete;
 import cloud.martinodutto.wtsapi.configuration.ConfigurationParameters;
 import cloud.martinodutto.wtsapi.exceptions.TaskNotFoundException;
 import cloud.martinodutto.wtsapi.exceptions.WtsInvocationException;
-import cloud.martinodutto.wtsapi.internal.services.CommandProducer;
+import cloud.martinodutto.wtsapi.internal.services.CommandHolder;
 import cloud.martinodutto.wtsapi.internal.services.WtsInvoker;
 
 import javax.annotation.Nonnull;
@@ -27,30 +27,26 @@ public final class Delete {
         this.config = config;
     }
 
-    static Delete of(ConfigurationParameters config) {
+    public static Delete of(ConfigurationParameters config) {
         return new Delete(config);
     }
 
     public void deleteTask(@Nonnull String taskName) throws IOException, InterruptedException {
-        deleteTask(taskName, false);
-    }
-
-    public void deleteTask(@Nonnull String taskName, boolean force) throws IOException, InterruptedException {
         Objects.requireNonNull(taskName, "You have to provide a task name");
-        CommandProducer cp = new CommandProducer.Builder(config.getSchTasksCommand())
+        CommandHolder ch = new CommandHolder.Builder(config.getSchTasksCommand())
                 .add(DELETE)
                 .add(TASKNAME.getCommand(), taskName)
-                .addIfNotNull(force ? FORCE.getCommand() : null)
+                .add(FORCE.getCommand()) // must force the deletion, to avoid prompting the user
                 .addIfNotNull(SYSTEM.getCommand(), config.getRemoteSystem())
                 .addIfNotNull(USERNAME.getCommand(), config.getRemoteUser())
                 .addIfNotNull(PASSWORD.getCommand(), config.getRemotePassword())
                 .build();
-        List<String> commands = cp.commands();
+        List<String> commands = ch.commands();
 
         try {
             WtsInvoker.submitCommands(commands);
         } catch (WtsInvocationException wie) {
-            if ("ERROR: The system cannot find the file specified.".equals(wie.getMessage().trim())) {
+            if (wie.getMessage().trim().matches("ERROR: The specified task name \".*\" does not exist in the system.")) {
                 throw new TaskNotFoundException(taskName);
             } else {
                 throw wie;

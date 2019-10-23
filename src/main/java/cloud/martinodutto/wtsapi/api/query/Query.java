@@ -4,7 +4,7 @@ import cloud.martinodutto.wtsapi.api.query.parsers.CSVQueryParser;
 import cloud.martinodutto.wtsapi.configuration.ConfigurationParameters;
 import cloud.martinodutto.wtsapi.exceptions.TaskNotFoundException;
 import cloud.martinodutto.wtsapi.exceptions.WtsInvocationException;
-import cloud.martinodutto.wtsapi.internal.services.CommandProducer;
+import cloud.martinodutto.wtsapi.internal.services.CommandHolder;
 import cloud.martinodutto.wtsapi.internal.services.WtsInvoker;
 
 import javax.annotation.Nonnull;
@@ -29,7 +29,7 @@ public final class Query {
         this.config = config;
     }
 
-    static Query of(ConfigurationParameters config) {
+    public static Query of(ConfigurationParameters config) {
         return new Query(config);
     }
 
@@ -41,7 +41,7 @@ public final class Query {
      * @throws InterruptedException An interrupt was issued while expecting the output of the Windows command.
      */
     public List<Map<String, String>> queryForAllTasks() throws IOException, InterruptedException {
-        CommandProducer cp = new CommandProducer.Builder(config.getSchTasksCommand())
+        CommandHolder ch = new CommandHolder.Builder(config.getSchTasksCommand())
                 .add(QUERY)
                 .add(FORMAT.getCommand(), "CSV")
                 .add(VERBOSE.getCommand())
@@ -49,7 +49,7 @@ public final class Query {
                 .addIfNotNull(USERNAME.getCommand(), config.getRemoteUser())
                 .addIfNotNull(PASSWORD.getCommand(), config.getRemotePassword())
                 .build();
-        List<String> commands = cp.commands();
+        List<String> commands = ch.commands();
         String rawCommandOutput = WtsInvoker.submitCommands(commands);
         CSVQueryParser csvQueryParser = new CSVQueryParser();
         return csvQueryParser.parse(rawCommandOutput);
@@ -67,7 +67,7 @@ public final class Query {
      */
     public List<Map<String, String>> queryForTask(@Nonnull String taskName) throws IOException, InterruptedException {
         Objects.requireNonNull(taskName, "You have to provide a task name");
-        CommandProducer cp = new CommandProducer.Builder(config.getSchTasksCommand())
+        CommandHolder ch = new CommandHolder.Builder(config.getSchTasksCommand())
                 .add(QUERY)
                 .add(FORMAT.getCommand(), "CSV")
                 .add(TASKNAME.getCommand(), "\"" + taskName + "\"")
@@ -76,7 +76,7 @@ public final class Query {
                 .addIfNotNull(USERNAME.getCommand(), config.getRemoteUser())
                 .addIfNotNull(PASSWORD.getCommand(), config.getRemotePassword())
                 .build();
-        List<String> commands = cp.commands();
+        List<String> commands = ch.commands();
 
         String rawCommandOutput;
         try {

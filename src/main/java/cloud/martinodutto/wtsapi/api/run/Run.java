@@ -3,7 +3,7 @@ package cloud.martinodutto.wtsapi.api.run;
 import cloud.martinodutto.wtsapi.configuration.ConfigurationParameters;
 import cloud.martinodutto.wtsapi.exceptions.TaskNotFoundException;
 import cloud.martinodutto.wtsapi.exceptions.WtsInvocationException;
-import cloud.martinodutto.wtsapi.internal.services.CommandProducer;
+import cloud.martinodutto.wtsapi.internal.services.CommandHolder;
 import cloud.martinodutto.wtsapi.internal.services.WtsInvoker;
 
 import javax.annotation.Nonnull;
@@ -27,20 +27,25 @@ public final class Run {
         this.config = config;
     }
 
-    static Run of(ConfigurationParameters config) {
+    public static Run of(ConfigurationParameters config) {
         return new Run(config);
     }
 
     public void runTask(@Nonnull String taskName) throws IOException, InterruptedException {
+        runTask(taskName, false);
+    }
+
+    public void runTask(@Nonnull String taskName, boolean immediately) throws IOException, InterruptedException {
         Objects.requireNonNull(taskName, "You have to provide a task name");
-        CommandProducer cp = new CommandProducer.Builder(config.getSchTasksCommand())
+        CommandHolder ch = new CommandHolder.Builder(config.getSchTasksCommand())
                 .add(RUN)
                 .add(TASKNAME.getCommand(), taskName)
+                .addIfNotNull(immediately ? IMMEDIATELY.getCommand() : null)
                 .addIfNotNull(SYSTEM.getCommand(), config.getRemoteSystem())
                 .addIfNotNull(USERNAME.getCommand(), config.getRemoteUser())
                 .addIfNotNull(PASSWORD.getCommand(), config.getRemotePassword())
                 .build();
-        List<String> commands = cp.commands();
+        List<String> commands = ch.commands();
 
         try {
             WtsInvoker.submitCommands(commands);

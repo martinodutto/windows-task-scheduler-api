@@ -8,11 +8,11 @@ import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
-public final class CommandProducer {
+public final class CommandHolder {
 
     private final List<String> commandList;
 
-    private CommandProducer(List<String> commandList) {
+    private CommandHolder(List<String> commandList) {
         this.commandList = commandList;
     }
 
@@ -54,8 +54,8 @@ public final class CommandProducer {
             return this;
         }
 
-        public CommandProducer build() {
-            return new CommandProducer(backingList);
+        public CommandHolder build() {
+            return new CommandHolder(backingList);
         }
     }
 }

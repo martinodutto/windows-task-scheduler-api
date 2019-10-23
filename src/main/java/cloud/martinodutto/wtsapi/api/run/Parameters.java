@@ -4,7 +4,8 @@ enum Parameters {
     SYSTEM("/S"),
     USERNAME("/U"),
     PASSWORD("/P"),
-    TASKNAME("/TN");
+    TASKNAME("/TN"),
+    IMMEDIATELY("/I");
 
     private String command;
 
